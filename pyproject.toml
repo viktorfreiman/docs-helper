@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docs-helper"
-version = "0.0.1"
+version = "0.0.2"
 description = "Kickstart repo"
 authors = ["Viktor Freiman <freiman.viktor@gmail.com>"]
 license = "MIT"
