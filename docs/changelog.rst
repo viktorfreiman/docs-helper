@@ -2,6 +2,11 @@
 Changelog
 =========
 
+v0.0.3
+======
+
+- setup of the project
+
 v0.0.2
 ======
 
