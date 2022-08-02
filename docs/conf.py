@@ -14,7 +14,6 @@ import toml
 
 docs_path = Path(__file__).absolute().parent
 project_path = docs_path.parent
-scripts_path = project_path / "scripts"
 
 # extract out the repo name from git
 repo_name = Path(
@@ -23,12 +22,9 @@ repo_name = Path(
     .strip()
 ).stem
 
-source_path = project_path / repo_name
 
 # Add path for sphinx to find
-sys.path.extend(
-    [str(docs_path), str(project_path), str(scripts_path), str(source_path)]
-)
+sys.path.extend([str(docs_path), str(project_path)])
 
 # -- Project information -----------------------------------------------------
 
@@ -105,6 +101,7 @@ autodoc_default_options = {
 intersphinx_mapping = {
     "py3": ("https://docs.python.org/3/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
+    "sphobjinv": ("https://sphobjinv.readthedocs.io/en/stable/", None),
 }
 
 # Add any paths that contain templates here, relative to this directory.

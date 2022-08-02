@@ -1,9 +1,8 @@
 Welcome to |project|'s documentation!
 =======================================
 
-A complete kickstart devcontainer repository for python3 for more info check :ref:`development`.
-
-`What is a devcontainer? <https://code.visualstudio.com/docs/remote/containers>`_
+Small script that makes it easier to work with intersphinx it takes config data from docs/conf.py
+:doc:`sphinx:usage/extensions/intersphinx`
 
 
 .. toctree::

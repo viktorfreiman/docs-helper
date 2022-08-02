@@ -1,12 +1,15 @@
 [tool.poetry]
 name = "docs-helper"
 version = "0.0.4"
-description = "Kickstart repo"
+description = "Simple interactive tool to help with intersphinx"
 authors = ["Viktor Freiman <freiman.viktor@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 documentation = "https://docs-helper.readthedocs.io"
 repository = "https://github.com/viktorfreiman/docs-helper"
+
+[project.scripts]
+hello-world = "docs_helper:main"
 
 [tool.poetry.dependencies]
 python = "^3.6.2"

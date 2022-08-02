@@ -16,37 +16,45 @@ Wraps also over `sphobjinv <https://github.com/bskinn/sphobjinv>`_ to make easy 
 "localhost" need to have a webserver with built html from sphinx,
 have ``autobuild-html-docs`` running
 
-.. todo::
-    have better support for finding port of autobuild-html-docs
-    use psutil?
+We don't need to use edit sys.path and and then to import
+
+We only use importlib.util
 """
 
+import importlib.util
+import os
+import signal
 import sys
 from pathlib import Path
-import os
 from urllib.parse import urljoin
-import signal
 
 
-def signal_SIGINT_handler(signal, frame):
+def _signal_SIGINT_handler(signal, frame):
     """This is to have a nicer printout on KeyboardInterrupt"""
     print("\nGOT SIGINT(Probably KeyboardInterrupt), Quitting")
     sys.exit(0)
 
 
 def main():
-    project_path = Path(__file__).absolute().parents[1]
-
-    # we need this for import to work
-    sys.path.insert(0, str(project_path))
+    # Just expect we are in the docs folder
+    # This fixes all things and just give the user error if we can't find conf.py
+    # If we can't find intersphinx_mapping -> quit
 
     print("Intersphinx objects.inv printout")
-    print("intersphinx_mapping is from docs/conf.py")
 
-    from docs.conf import intersphinx_mapping
+    print(f'{Path("conf.py").resolve()}')
+    conf = get_py_config(Path("conf.py"))
 
-    # add localhost to make easy to see self
-    intersphinx_mapping["localhost"] = ("http://127.0.0.1:8000/", None)
+    try:
+        intersphinx_mapping = conf.intersphinx_mapping
+    except AttributeError:
+        print("Can't find intersphinx_mapping, quitting")
+        sys.exit(1)
+    # # add localhost to make easy to see self
+    # intersphinx_mapping[project] = (
+    #     next(search_docs_parent.glob("_?build/html/objects.inv")),
+    #     None,
+    # )
 
     for i, doc in enumerate(intersphinx_mapping.keys()):
         print(f"{i}) {doc}")
@@ -63,18 +71,21 @@ def main():
         )
     )
 
-    # the extra slash if it is missing in the config data
-    # and urljoin will fix the url for us
-    obj_inv_url = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
+    if picked_name == project:
+        obj_inv_path = intersphinx_mapping[project][0]
+    else:
+        # the extra slash if it is missing in the config data
+        # and urljoin will fix the url for us
+        obj_inv_path = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
 
     if type_picker:
         print("--- sphobjinv ---")
         search = input("Search: ")
-        cli = f"sphobjinv suggest {obj_inv_url} {search} -su"
+        cli = f"sphobjinv suggest {obj_inv_path} {search} -su"
 
     else:
         print("--- intersphinx ---")
-        cli = f"{sys.executable} -m sphinx.ext.intersphinx {obj_inv_url}"
+        cli = f"{sys.executable} -m sphinx.ext.intersphinx {obj_inv_path}"
 
     os.system(cli)
 
@@ -103,8 +114,34 @@ def main():
     print(f"CLI:\n{cli}")
 
 
+def get_py_config(path: Path):
+    """Imports the sphinx to extract the intersphinx mapping
+
+    Uses importlib.util tricks to import without the problems of edit sys.path
+    and python lint missing imports
+
+    .. note::
+        This function will execute the input file
+
+    from:
+    https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
+    """
+    module_name = path.name
+
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    module = importlib.util.module_from_spec(spec)
+
+    # sys.mod is good to set
+    sys.modules[module_name] = module
+
+    # Execte the imported file
+    spec.loader.exec_module(module)
+
+    return module
+
+
 if __name__ == "__main__":
     # activate signal
-    signal.signal(signal.SIGINT, signal_SIGINT_handler)
+    signal.signal(signal.SIGINT, _signal_SIGINT_handler)
 
     main()
