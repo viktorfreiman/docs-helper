@@ -1,13 +1,5 @@
 # docs-helper
 
-- [docs-helper](#docs-helper)
+Simple interactive wrapper over sphobjinv and your sphinx conf.py to make it easier to cross-reference with intersphinx.
 
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/viktorfreiman/py-dev-init)
-
-For setup see [development.rst](docs/development.rst)
-
-We will start with a single file for now
-
-https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
-
-KISS
+All docs are in the docs folder
