@@ -19,10 +19,22 @@ have ``autobuild-html-docs`` running
 We don't need to use edit sys.path and and then to import
 
 We only use importlib.util
+
+.. todo::
+    set chmod on env file like ssh does to keys
+
+    autofix shorthand
+    https://github.com/bskinn/sphobjinv/issues/234
+
+.. note::
+
+    idea make it a sphinx plugin to autofix the setup and extract build_dir
+
 """
 
 import importlib.util
 import os
+import re
 import signal
 import sys
 from pathlib import Path
@@ -42,8 +54,12 @@ def main():
 
     print("Intersphinx objects.inv printout")
 
-    print(f'{Path("conf.py").resolve()}')
-    conf = get_py_config(Path("conf.py"))
+    # for testing
+    os.chdir("/workspaces/docs-helper/docs/")
+
+    conf_path = Path("conf.py").resolve()
+    print(f"{conf_path=}")
+    conf = get_py_config(conf_path)
 
     try:
         intersphinx_mapping = conf.intersphinx_mapping
@@ -71,12 +87,12 @@ def main():
         )
     )
 
-    if picked_name == project:
-        obj_inv_path = intersphinx_mapping[project][0]
-    else:
-        # the extra slash if it is missing in the config data
-        # and urljoin will fix the url for us
-        obj_inv_path = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
+    # if picked_name == project:
+    #     obj_inv_path = intersphinx_mapping[project][0]
+    # else:
+    # the extra slash if it is missing in the config data
+    # and urljoin will fix the url for us
+    obj_inv_path = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
 
     if type_picker:
         print("--- sphobjinv ---")
@@ -126,7 +142,7 @@ def get_py_config(path: Path):
     from:
     https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
     """
-    module_name = path.name
+    module_name = Path(path).name
 
     spec = importlib.util.spec_from_file_location(module_name, path)
     module = importlib.util.module_from_spec(spec)
@@ -138,6 +154,18 @@ def get_py_config(path: Path):
     spec.loader.exec_module(module)
 
     return module
+
+
+def find_bild_dir():
+    """Per sphinx ref there are
+    https://www.sphinx-doc.org/en/master/man/sphinx-build.html#environment-variables
+
+    """
+    with open("Makefile") as mfile:
+        data = mfile.read()
+        match = re.search("BUILDDIR += (.+)", data)
+        if match:
+            print(match.group(1))
 
 
 if __name__ == "__main__":
