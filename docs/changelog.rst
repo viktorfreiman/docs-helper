@@ -2,6 +2,11 @@
 Changelog
 =========
 
+v0.0.7
+======
+
+- First working version
+
 v0.0.3
 ======
 
