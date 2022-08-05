@@ -38,7 +38,16 @@ import re
 import signal
 import sys
 from pathlib import Path
-from urllib.parse import urljoin
+from typing import Union
+from urllib.parse import urljoin, urlparse
+
+import pkg_resources
+
+
+def _get_version():
+    name = Path(__file__).stem
+    # from: https://github.com/python-poetry/poetry/issues/144#issuecomment-393257700
+    return pkg_resources.get_distribution(name).version
 
 
 def _signal_SIGINT_handler(signal, frame):
@@ -47,30 +56,39 @@ def _signal_SIGINT_handler(signal, frame):
     sys.exit(0)
 
 
+__version__ = _get_version()
+
+
 def main():
     # Just expect we are in the docs folder
     # This fixes all things and just give the user error if we can't find conf.py
     # If we can't find intersphinx_mapping -> quit
 
+
+    conf_path = Path("conf.py")
+
+    if not conf_path.exists():
+        print("Can't find conf.py")
+        return 1
+
     print("Intersphinx objects.inv printout")
-
-    # for testing
-    os.chdir("/workspaces/docs-helper/docs/")
-
-    conf_path = Path("conf.py").resolve()
-    print(f"{conf_path=}")
+    conf_path = conf_path.resolve()
+    print(f"conf_path={conf_path}")
     conf = get_py_config(conf_path)
 
     try:
         intersphinx_mapping = conf.intersphinx_mapping
     except AttributeError:
         print("Can't find intersphinx_mapping, quitting")
-        sys.exit(1)
-    # # add localhost to make easy to see self
-    # intersphinx_mapping[project] = (
-    #     next(search_docs_parent.glob("_?build/html/objects.inv")),
-    #     None,
-    # )
+        return 1
+
+    build_dir = find_bild_dir()
+
+    # add local-project to make easy to see self
+    intersphinx_mapping[conf.project] = (
+        build_dir / "html/objects.inv",
+        None,
+    )
 
     for i, doc in enumerate(intersphinx_mapping.keys()):
         print(f"{i}) {doc}")
@@ -87,17 +105,20 @@ def main():
         )
     )
 
-    # if picked_name == project:
-    #     obj_inv_path = intersphinx_mapping[project][0]
-    # else:
-    # the extra slash if it is missing in the config data
-    # and urljoin will fix the url for us
-    obj_inv_path = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
+    if picked_name == conf.project:
+        obj_inv_path = intersphinx_mapping[conf.project][0]
+    else:
+        # the extra slash if it is missing in the config data
+        # and urljoin will fix the url for us
+        obj_inv_path = urljoin(intersphinx_mapping[picked_name][0] + "/", "objects.inv")
 
     if type_picker:
         print("--- sphobjinv ---")
         search = input("Search: ")
-        cli = f"sphobjinv suggest {obj_inv_path} {search} -su"
+
+        cli = f"sphobjinv suggest {obj_inv_path} {search} -s"
+        if urlparse(str(obj_inv_path)).scheme:
+            cli += " --url"
 
     else:
         print("--- intersphinx ---")
@@ -130,7 +151,7 @@ def main():
     print(f"CLI:\n{cli}")
 
 
-def get_py_config(path: Path):
+def get_py_config(path: Union[Path, str]):
     """Imports the sphinx to extract the intersphinx mapping
 
     Uses importlib.util tricks to import without the problems of edit sys.path
@@ -157,19 +178,25 @@ def get_py_config(path: Path):
 
 
 def find_bild_dir():
-    """Per sphinx ref there are
+    """
+    Support only Makefile for now
+
+    Per sphinx ref there are
     https://www.sphinx-doc.org/en/master/man/sphinx-build.html#environment-variables
 
+    .. todo::
+        support for make.bat and ENV
     """
     with open("Makefile") as mfile:
         data = mfile.read()
         match = re.search("BUILDDIR += (.+)", data)
         if match:
-            print(match.group(1))
+            return Path(match.group(1)).resolve()
 
 
 if __name__ == "__main__":
     # activate signal
     signal.signal(signal.SIGINT, _signal_SIGINT_handler)
 
-    main()
+    # https://docs.python.org/3/library/__main__.html#packaging-considerations
+    sys.exit(main())
