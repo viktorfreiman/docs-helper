@@ -100,6 +100,7 @@ autodoc_default_options = {
 
 intersphinx_mapping = {
     "py3": ("https://docs.python.org/3/", None),
+    "pytest": ("https://docs.pytest.org/en/7.0.x/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
     "sphobjinv": ("https://sphobjinv.readthedocs.io/en/stable/", None),
 }
