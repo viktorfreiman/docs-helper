@@ -4,7 +4,7 @@ version = "0.0.7"
 description = "Simple interactive tool to help with intersphinx"
 authors = ["Viktor Freiman <freiman.viktor@gmail.com>"]
 license = "MIT"
-readme = "docs/index.rst"
+readme = "README.md"
 documentation = "https://docs-helper.readthedocs.io"
 repository = "https://github.com/viktorfreiman/docs-helper"
 
