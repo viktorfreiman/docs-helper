@@ -64,7 +64,6 @@ def main():
     # This fixes all things and just give the user error if we can't find conf.py
     # If we can't find intersphinx_mapping -> quit
 
-
     conf_path = Path("conf.py")
 
     if not conf_path.exists():
