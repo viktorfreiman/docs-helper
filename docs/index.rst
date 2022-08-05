@@ -1,9 +1,12 @@
-Welcome to |project|'s documentation!
+Welcome to docs-helper's documentation!
 =======================================
 
-Small script that makes it easier to work with intersphinx it takes config data from docs/conf.py
 :doc:`sphinx:usage/extensions/intersphinx`
 
+Simple interactive wrapper over sphobjinv and your sphinx conf.py to make it easier to cross-reference with intersphinx.
+
+.. todo::
+    tests
 
 .. toctree::
     :maxdepth: 2
