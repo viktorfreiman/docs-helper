@@ -43,6 +43,10 @@ To audobuild html docs when developing
     # OR use the alias
     autobuild-html-docs
 
+Tests
+*****
+
+Test are using pytest
 
 Intersphinx
 ***********
