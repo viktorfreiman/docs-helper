@@ -1,15 +1,15 @@
 [tool.poetry]
 name = "docs-helper"
-version = "0.0.4"
+version = "0.0.7"
 description = "Simple interactive tool to help with intersphinx"
 authors = ["Viktor Freiman <freiman.viktor@gmail.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "docs/index.rst"
 documentation = "https://docs-helper.readthedocs.io"
 repository = "https://github.com/viktorfreiman/docs-helper"
 
-[project.scripts]
-hello-world = "docs_helper:main"
+[tool.poetry.scripts]
+docs-helper = "docs_helper:main"
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
@@ -27,6 +27,7 @@ sphinx-autobuild = "^2021.3.14"
 sphinx-rtd-theme = "^1.0.0"
 sphinxcontrib-kroki = "^1.3.0"
 toml = "^0.10.2"
+pytest = "~7.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
