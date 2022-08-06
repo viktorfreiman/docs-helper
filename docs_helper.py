@@ -118,26 +118,25 @@ def main():
     cli_out = subprocess.check_output(cli).decode()
     print(cli_out)
 
-    # todo: Change this printout to use triple quotes insted
     print(
-        "--- Note ---\n"
-        "Please note the output from this tools\n"
-        "need to be changed to work as a cross-references\n"
-        "Exemple:\n"
-        ":std:label:`thing_to_link` -> :ref:`thing_to_link`\n"
-        "or\n"
-        ":std:label:`thing_to_link` -> :ref:`project_name:thing_to_link`\n\n"
-        ":py:function:`that_func`   -> :py:func:`that_func`\n"
-        "or\n"
-        ":py:function:`that_func`   -> :py:func:`project_name:that_func`\n"
-        "--- Note ---\n"
-    )
+        """
+--- Note ---
+Please note the output from this tools
+need to be changed to work as a cross-references
+Exemple:
+:std:label:`thing_to_link` -> :ref:`thing_to_link`
+or
+:std:label:`thing_to_link` -> :ref:`project_name:thing_to_link`
 
-    print(
-        "--- Links ---\n"
-        "Link for intersphinx cross-referencing tags\n"
-        "https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#xref-syntax\n"  # noqa b950
-        "--- Links ---\n"
+:py:function:`that_func`   -> :py:func:`that_func`
+or
+:py:function:`that_func`   -> :py:func:`project_name:that_func`
+--- Note ---
+--- Links ---
+Link for intersphinx cross-referencing tags
+https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#xref-syntax
+--- Links ---
+    """
     )
 
     print(f"CLI:\n{cli}")
