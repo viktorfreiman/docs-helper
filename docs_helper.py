@@ -35,18 +35,11 @@ We only use importlib.util
 import importlib.util
 import re
 import signal
+import subprocess
 import sys
 from pathlib import Path
 from typing import Union
 from urllib.parse import urljoin, urlparse
-
-import pkg_resources
-
-
-def _get_version():
-    name = Path(__file__).stem
-    # from: https://github.com/python-poetry/poetry/issues/144#issuecomment-393257700
-    return pkg_resources.get_distribution(name).version
 
 
 def _signal_SIGINT_handler(signal, frame):
@@ -55,7 +48,7 @@ def _signal_SIGINT_handler(signal, frame):
     sys.exit(0)
 
 
-__version__ = _get_version()
+__version__ = "0.0.8"
 
 
 def main():
