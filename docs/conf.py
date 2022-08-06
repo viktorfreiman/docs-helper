@@ -103,6 +103,12 @@ intersphinx_mapping = {
     "pytest": ("https://docs.pytest.org/en/7.0.x/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
     "sphobjinv": ("https://sphobjinv.readthedocs.io/en/stable/", None),
+
+    # azure-identity is only to test docs-helper
+    "azure-identity": (
+        "https://azuresdkdocs.blob.core.windows.net/$web/python/azure-identity/latest/",
+        None,
+    ),
 }
 
 # Add any paths that contain templates here, relative to this directory.
