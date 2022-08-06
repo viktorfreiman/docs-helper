@@ -2,6 +2,11 @@
 Changelog
 =========
 
+v0.0.9
+======
+
+- CLI outputs as string and not array
+
 v0.0.8
 ======
 

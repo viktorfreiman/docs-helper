@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docs-helper"
-version = "0.0.8"
+version = "0.0.9"
 description = "Simple interactive tool to help with intersphinx"
 authors = ["Viktor Freiman <freiman.viktor@gmail.com>"]
 license = "MIT"

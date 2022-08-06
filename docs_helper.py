@@ -45,13 +45,17 @@ def _signal_SIGINT_handler(signal, frame):
     sys.exit(0)
 
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 
 def main():
     # Just expect we are in the docs folder
     # This fixes all things and just give the user error if we can't find conf.py
     # If we can't find intersphinx_mapping -> quit
+
+    # # for testing
+    # import os
+    # os.chdir("/workspaces/docs-helper/docs")
 
     conf_path = Path("conf.py")
 
@@ -136,7 +140,7 @@ https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#xref-synt
     """
     )
 
-    print(f"CLI:\n{cli}")
+    print(f'CLI:\n{" ".join(list(map(str, cli)))}')
 
 
 def get_py_config(path: Union[Path, str]):
