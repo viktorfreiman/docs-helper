@@ -33,7 +33,6 @@ We only use importlib.util
 """
 
 import importlib.util
-import os
 import re
 import signal
 import sys
@@ -115,15 +114,16 @@ def main():
         print("--- sphobjinv ---")
         search = input("Search: ")
 
-        cli = f"sphobjinv suggest {obj_inv_path} {search} -s"
+        cli = ["sphobjinv", "suggest", obj_inv_path, search, "-s"]
         if urlparse(str(obj_inv_path)).scheme:
-            cli += " --url"
+            cli.append("--url")
 
     else:
         print("--- intersphinx ---")
-        cli = f"{sys.executable} -m sphinx.ext.intersphinx {obj_inv_path}"
+        cli = [sys.executable, "-m", "sphinx.ext.intersphinx", obj_inv_path]
 
-    os.system(cli)
+    cli_out = subprocess.check_output(cli).decode()
+    print(cli_out)
 
     # todo: Change this printout to use triple quotes insted
     print(
