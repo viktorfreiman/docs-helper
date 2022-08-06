@@ -13,9 +13,6 @@ docs_helper.py
 
 Wraps also over `sphobjinv <https://github.com/bskinn/sphobjinv>`_ to make easy to search
 
-"localhost" need to have a webserver with built html from sphinx,
-have ``autobuild-html-docs`` running
-
 We don't need to use edit sys.path and and then to import
 
 We only use importlib.util
